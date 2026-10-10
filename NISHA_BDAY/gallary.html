@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memories & Moments 📸✨</title>
+    <!-- Tailwind CSS for utility layout structure -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #ffb3c1);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            color: #4a4a4a;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles container */
+        .heart-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; overflow: hidden;
+        }
+
+        .heart {
+            position: absolute; bottom: -30px; color: #ff4d6d;
+            font-size: 20px; opacity: 0.7; animation: floatUp 7s linear infinite;
+            filter: drop-shadow(0 2px 5px rgba(255, 77, 109, 0.3));
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) rotate(0deg) scale(0.8); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-110vh) translateX(var(--randomX)) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Container Layouts */
+        .main-app {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 15px 40px 15px;
+        }
+
+        .gallery-card {
+            background: rgba(255, 253, 249, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 30px 20px;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            border: 2px dashed #ff8fa3;
+            position: relative;
+        }
+
+        h1.main-title {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4d6d;
+            font-size: 3.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2px;
+        }
+
+        .mode-btn {
+            background: white;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(255, 77, 109, 0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 20;
+        }
+
+        .mode-btn:hover, .mode-btn.active {
+            background: linear-gradient(135deg, #ff4d6d, #ff758f);
+            color: white;
+            border-color: #ff4d6d;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.35);
+        }
+
+        /* MODE 1: 3D Ring Carousel */
+        .carousel-stage {
+            perspective: 1100px;
+            width: 100%;
+            height: 380px;
+            position: relative;
+            margin: 20px 0 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .carousel-ring {
+            width: 220px;
+            height: 290px;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .carousel-item {
+            position: absolute;
+            width: 220px;
+            height: 290px;
+            left: 0; top: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 12px 30px rgba(255, 77, 109, 0.3);
+            background: white;
+            cursor: pointer;
+            transition: transform 0.3s, filter 0.3s;
+        }
+
+        .carousel-item img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+
+        .controls-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 20px auto 10px auto;
+            position: relative;
+            z-index: 30; /* High z-index to guarantee visibility & clickability */
+        }
+
+        .ctrl-btn {
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(255, 77, 109, 0.4);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+        }
+
+        .ctrl-btn:hover {
+            transform: scale(1.15) rotate(5deg);
+            background: linear-gradient(135deg, #ff758f, #ff4d6d);
+        }
+
+        .ctrl-btn:active {
+            transform: scale(0.95);
+        }
+
+        .photo-counter {
+            font-weight: 700;
+            color: #ff4d6d;
+            font-size: 1.15rem;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid #ffb3c1;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* MODE 2: Balloon Pop Mode */
+        .balloon-stage {
+            position: relative;
+            width: 100%;
+            min-height: 480px;
+            background: linear-gradient(to bottom, #e0f2fe, #fff0f5);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px dashed #93c5fd;
+        }
+
+        .floating-balloon {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.1);
+            animation: floatBalloon 6s ease-in-out infinite alternate;
+            transition: transform 0.2s;
+            z-index: 15;
+        }
+
+        .floating-balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            width: 2px;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-balloon:hover {
+            transform: scale(1.15) !important;
+        }
+
+        @keyframes floatBalloon {
+            0% { transform: translateY(0px) rotate(-3deg); }
+            100% { transform: translateY(-30px) rotate(4deg); }
+        }
+
+        /* MODE 3: Sky Drop / Polaroid Rain */
+        .sky-stage {
+            position: relative;
+            width: 100%;
+            min-height: 520px;
+            background: radial-gradient(circle at center, #fff, #ffe5ec);
+            border-radius: 24px;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .polaroid-card {
+            position: absolute;
+            width: 160px;
+            background: white;
+            padding: 10px 10px 25px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            cursor: grab;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+            z-index: 12;
+        }
+
+        .polaroid-card:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            box-shadow: 0 20px 35px rgba(255, 77, 109, 0.3);
+            z-index: 50;
+        }
+
+        .polaroid-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        .polaroid-caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: #ff4d6d;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .filmstrip-stage {
+            position: relative;
+            width: 100%;
+            padding: 30px 0;
+            background: #1a1a1a;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .filmstrip-track {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            transition: transform 0.5s ease-out;
+            width: max-content;
+        }
+
+        .film-frame {
+            position: relative;
+            width: 200px;
+            height: 260px;
+            background: #000;
+            padding: 25px 12px;
+            border-left: 6px dashed #fff;
+            border-right: 6px dashed #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .film-frame:hover {
+            transform: scale(1.05);
+        }
+
+        .film-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(0.35) contrast(1.1);
+        }
+
+        /* Lightbox Modal */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.88);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        .lightbox-content {
+            background: white;
+            padding: 15px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        @keyframes zoomIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .lightbox-img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        /* Disclaimer Modal Popup */
+        .disclaimer-modal {
+            display: flex;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.78);
+            z-index: 9999; /* Highest priority to sit above everything */
+            justify-content: center; align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-card {
+            background: white;
+            padding: 40px 28px;
+            border-radius: 32px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(255, 77, 109, 0.4);
+            border: 3px solid #ff4d6d;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .proceed-btn {
+            background: linear-gradient(135deg, #ff4d6d, #d90429);
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(217, 4, 41, 0.4);
+            transition: all 0.3s;
+            z-index: 10000;
+        }
+
+        .proceed-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 12px 25px rgba(217, 4, 41, 0.5);
+        }
+
+        .btn-link {
+            padding: 12px 24px;
+            background: white;
+            color: #ff4d6d;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 25px;
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .btn-link:hover {
+            background: #ff4d6d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+        }
+
+        /* Sparkle burst canvas */
+        #fxCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 800;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Particle FX Canvas -->
+    <canvas id="fxCanvas"></canvas>
+
+    <!-- Disclaimer Warning Modal -->
+    <div class="disclaimer-modal" id="disclaimerModal">
+        <div class="modal-card">
+            <div class="text-6xl mb-3 animate-bounce">⚠️</div>
+            <div class="text-red-600 text-2xl font-bold mb-3 tracking-wide">DISCLAIMER</div>
+            <div class="text-gray-700 text-lg leading-relaxed mb-6 font-medium">
+                Are you sure you want to open this?<br>
+                <span class="text-pink-500 italic font-semibold">Open it at your own risk! 🙈✨</span>
+            </div>
+            <button class="proceed-btn" onclick="acceptDisclaimer()">Yes, I'm Ready! 🚀</button>
+        </div>
+    </div>
+
+    <!-- Floating Background Hearts -->
+    <div class="heart-container" id="heartContainer"></div>
+
+    <div class="main-app">
+        <div class="gallery-card">
+            <h1 class="main-title">📸 Photo Gallery ✨</h1>
+            <p class="text-gray-600 text-base md:text-lg mb-6 font-medium">Explore magical memories in your favorite style!</p>
+
+            <!-- Creative Gallery Mode Switcher Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 mb-6 relative z-30">
+                <button class="mode-btn active" id="btnMode3D" onclick="switchMode('3d')">
+                    <span>🔄</span> 3D Wheel
+                </button>
+                <button class="mode-btn" id="btnModeBalloon" onclick="switchMode('balloon')">
+                    <span>🎈</span> Balloon Pop
+                </button>
+                <button class="mode-btn" id="btnModeSky" onclick="switchMode('sky')">
+                    <span>🌧️</span> Polaroid Drop
+                </button>
+                <button class="mode-btn" id="btnModeFilm" onclick="switchMode('film')">
+                    <span>🎞️</span> Vintage Reel
+                </button>
+            </div>
+
+            <!-- MODE 1: 3D Ring Carousel -->
+            <div id="view3D" class="gallery-mode-view">
+                <div class="carousel-stage">
+                    <div class="carousel-ring" id="carouselRing"></div>
+                </div>
+            </div>
+
+            <!-- MODE 2: Balloon Pop View -->
+            <div id="viewBalloon" class="gallery-mode-view hidden">
+                <div class="balloon-stage flex flex-col justify-between p-4" id="balloonStage">
+                    <div class="text-pink-600 font-semibold text-sm md:text-base">Pop a balloon to release a beautiful memory! 🎈💥</div>
+                    <div id="balloonContainer" class="relative w-full h-full flex-grow my-4"></div>
+                </div>
+            </div>
+
+            <!-- MODE 3: Sky Drop / Polaroid View -->
+            <div id="viewSky" class="gallery-mode-view hidden">
+                <div class="sky-stage relative" id="skyStage">
+                    <div class="text-pink-600 font-semibold text-sm md:text-base mb-2">Click or drag dropped polaroids to inspect them! ✨</div>
+                    <div id="skyContainer" class="w-full h-[450px] relative"></div>
+                </div>
+            </div>
+
+            <!-- MODE 4: Vintage Reel View -->
+            <div id="viewFilm" class="gallery-mode-view hidden">
+                <div class="filmstrip-stage">
+                    <div class="filmstrip-track" id="filmTrack"></div>
+                </div>
+            </div>
+
+            <!-- Controls toolbar (Guaranteed visible and styled) -->
+            <div class="controls-container">
+                <button class="ctrl-btn" onclick="prevPhoto()" title="Previous Memory">◀</button>
+                <div class="photo-counter" id="counter">1 / 22</div>
+                <button class="ctrl-btn" onclick="nextPhoto()" title="Next Memory">▶</button>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="mt-8 flex flex-wrap justify-center gap-3 relative z-30">
+                <a href="letter.html" class="btn-link">⬅ Back to Letter</a>
+                <a href="nazar.html" class="btn-link">🧿 Nazar & Blessings</a>
+                <a href="index.html" class="btn-link">🏠 Return Home</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Preview Modal -->
+    <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img src="" id="lightboxImg" class="lightbox-img" alt="Enlarged Memory">
+            <p id="lightboxCaption" class="mt-4 text-pink-600 font-bold text-lg font-serif"></p>
+            <button onclick="closeLightbox()" class="mt-4 px-6 py-2 bg-pink-500 text-white rounded-full font-semibold hover:bg-pink-600 shadow-md">Close ❌</button>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="audio/nis.mpeg" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Photo Dataset with local paths and web fallbacks
+        const photos = [
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.32 AM.jpeg", fallback: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80", caption: "Sweet Smiles 💕" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.33 AM.jpeg", fallback: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80", caption: "Pure Happiness ✨" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.34 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&q=80", caption: "Unforgettable Day 🌸" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.34 AM (2).jpeg", fallback: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80", caption: "Best Memories 📸" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.34 AM.jpeg", fallback: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80", caption: "Sunshine Vibes ☀️" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.35 AM.jpeg", fallback: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=500&q=80", caption: "Laughs & Joy 💖" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.36 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80", caption: "Cute Moments 🌷" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.36 AM.jpeg", fallback: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80", caption: "Golden Hour ✨" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.37 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80", caption: "Glowing Radiance 🌟" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.37 AM (2).jpeg", fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80", caption: "Silly Laughs 🥳" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.37 AM.jpeg", fallback: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&q=80", caption: "Special Moment 💖" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.38 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=500&q=80", caption: "Forever Cherished 🎀" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.38 AM (2).jpeg", fallback: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=500&q=80", caption: "Magical Vibe ✨" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.38 AM.jpeg", fallback: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&q=80", caption: "Sweet Smile 😊" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.39 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80", caption: "Peace & Love ✌️" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.39 AM.jpeg", fallback: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80", caption: "Dreamy Views 💭" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.40 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=80", caption: "Precious Snap 📷" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.40 AM (2).jpeg", fallback: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80", caption: "Good Times 🎈" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.40 AM.jpeg", fallback: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=500&q=80", caption: "Heartwarming 💓" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.41 AM (1).jpeg", fallback: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80", caption: "Starry Eyes ⭐" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.41 AM (2).jpeg", fallback: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80", caption: "Joyful Days 🎉" },
+            { src: "images/WhatsApp Image 2026-09-12 at 11.32.41 AM.jpeg", fallback: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80", caption: "Eternal Memories 💫" }
+        ];
+
+        let currentIndex = 0;
+        let currentMode = '3d';
+        let autoRotateTimer = null;
+        let audioCtx = null;
+
+        // Sound synthesizer helper using Web Audio API
+        function playSound(type) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                if (type === 'pop') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.12);
+                } else if (type === 'shutter') {
+                    const bufferSize = audioCtx.sampleRate * 0.08;
+                    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = Math.random() * 2 - 1;
+                    }
+                    const noise = audioCtx.createBufferSource();
+                    noise.buffer = buffer;
+                    const gain = audioCtx.createGain();
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                    noise.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    noise.start();
+                }
+            } catch (e) {
+                console.log("Audio effect note:", e);
+            }
+        }
+
+        // Particle background generator
+        const heartContainer = document.getElementById('heartContainer');
+        const particleIcons = ['❤️', '💖', '🎈', '✨', '📸', '🥳', '🌸'];
+
+        function spawnFloatingParticle() {
+            const el = document.createElement('div');
+            el.classList.add('heart');
+            el.innerText = particleIcons[Math.floor(Math.random() * particleIcons.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = (Math.random() * 14 + 16) + 'px';
+            el.style.setProperty('--randomX', (Math.random() * 200 - 100) + 'px');
+            const duration = Math.random() * 3 + 5;
+            el.style.animationDuration = duration + 's';
+            heartContainer.appendChild(el);
+            setTimeout(() => el.remove(), duration * 1000);
+        }
+        setInterval(spawnFloatingParticle, 400);
+
+        // Canvas Sparkle Confetti Effect
+        const canvas = document.getElementById('fxCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerConfetti(x, y) {
+            const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffd166', '#06d6a0', '#118ab2'];
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.5) * 12 - 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 7 + 4,
+                    alpha: 1,
+                    life: 1
+                });
+            }
+        }
+
+        function animateFX() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2; // gravity
+                p.alpha -= 0.025;
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                if (p.alpha <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animateFX);
+        }
+        animateFX();
+
+        // 1. Initialize 3D Ring
+        const ring = document.getElementById('carouselRing');
+        const total = photos.length;
+        const angleStep = 360 / total;
+
+        function getRadius() {
+            return window.innerWidth < 640 ? 360 : 540;
+        }
+
+        function init3DCarousel() {
+            ring.innerHTML = '';
+            const radius = getRadius();
+            photos.forEach((photo, idx) => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item';
+                const angle = idx * angleStep;
+                item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+
+                const img = document.createElement('img');
+                img.src = photo.src;
+                img.alt = photo.caption;
+                img.onerror = () => { img.src = photo.fallback; };
+
+                item.appendChild(img);
+                item.onclick = (e) => {
+                    if (currentIndex === idx) {
+                        openLightbox(photo);
+                    } else {
+                        currentIndex = idx;
+                        updateCarousel();
+                    }
+                };
+                ring.appendChild(item);
+            });
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const currentAngle = -currentIndex * angleStep;
+            ring.style.transform = `rotateY(${currentAngle}deg)`;
+            document.getElementById('counter').innerText = `${currentIndex + 1} / ${total}`;
+        }
+
+        // 2. Initialize Balloon Mode
+        const balloonColors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#a2d2ff', '#cdb4db', '#ffc8dd'];
+        function initBalloonMode() {
+            const container = document.getElementById('balloonContainer');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 8; i++) {
+                spawnBalloon(container, i);
+            }
+        }
+
+        function spawnBalloon(container, indexOffset) {
+            const b = document.createElement('div');
+            b.className = 'floating-balloon';
+            const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+            b.style.backgroundColor = color;
+            b.style.left = (Math.random() * 80 + 5) + '%';
+            b.style.top = (Math.random() * 60 + 10) + '%';
+            b.innerText = '🎈';
+
+            b.onclick = (e) => {
+                playSound('pop');
+                triggerConfetti(e.clientX, e.clientY);
+                const photo = photos[Math.floor(Math.random() * photos.length)];
+                b.remove();
+                openLightbox(photo);
+                setTimeout(() => spawnBalloon(container, indexOffset), 1200);
+            };
+
+            container.appendChild(b);
+        }
+
+        // 3. Initialize Sky Drop / Polaroid Rain Mode
+        function initSkyMode() {
+            const container = document.getElementById('skyContainer');
+            container.innerHTML = '';
+
+            const activePhotos = photos.slice(0, 10);
+            activePhotos.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = 'polaroid-card';
+                card.style.left = (Math.random() * 70 + 5) + '%';
+                card.style.top = (Math.random() * 60 + 10) + '%';
+                const rot = (Math.random() * 30 - 15);
+                card.style.transform = `rotate(${rot}deg)`;
+
+                const img = document.createElement('img');
+                img.src = p.src;
+                img.onerror = () => { img.src = p.fallback; };
+
+                const cap = document.createElement('div');
+                cap.className = 'polaroid-caption';
+                cap.innerText = p.caption;
+
+                card.appendChild(img);
+                card.appendChild(cap);
+
+                card.onclick = (e) => {
+                    triggerConfetti(e.clientX, e.clientY);
+                    openLightbox(p);
+                };
+
+                container.appendChild(card);
+            });
+        }
+
+        // 4. Initialize Vintage Filmstrip Reel
+        function initFilmMode() {
+            const track = document.getElementById('filmTrack');
+            track.innerHTML = '';
+
+            photos.forEach((p, idx) => {
+                const frame = document.createElement('div');
+                frame.className = 'film-frame';
+                const img = document.createElement('img');
+                img.src = p.src;
+                img.onerror = () => { img.src = p.fallback; };
+                frame.appendChild(img);
+
+                frame.onclick = (e) => {
+                    playSound('shutter');
+                    triggerConfetti(e.clientX, e.clientY);
+                    currentIndex = idx;
+                    openLightbox(p);
+                };
+                track.appendChild(frame);
+            });
+            updateFilmScroll();
+        }
+
+        function updateFilmScroll() {
+            const track = document.getElementById('filmTrack');
+            const offset = -currentIndex * 220;
+            track.style.transform = `translateX(${offset}px)`;
+            document.getElementById('counter').innerText = `${currentIndex + 1} / ${total}`;
+        }
+
+        // Mode Switcher Logic
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.gallery-mode-view').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (mode === '3d') {
+                document.getElementById('view3D').classList.remove('hidden');
+                document.getElementById('btnMode3D').classList.add('active');
+                init3DCarousel();
+            } else if (mode === 'balloon') {
+                document.getElementById('viewBalloon').classList.remove('hidden');
+                document.getElementById('btnModeBalloon').classList.add('active');
+                initBalloonMode();
+            } else if (mode === 'sky') {
+                document.getElementById('viewSky').classList.remove('hidden');
+                document.getElementById('btnModeSky').classList.add('active');
+                initSkyMode();
+            } else if (mode === 'film') {
+                document.getElementById('viewFilm').classList.remove('hidden');
+                document.getElementById('btnModeFilm').classList.add('active');
+                initFilmMode();
+            }
+        }
+
+        // Common Navigation Controls
+        function nextPhoto() {
+            currentIndex = (currentIndex + 1) % total;
+            if (currentMode === '3d') updateCarousel();
+            else if (currentMode === 'film') updateFilmScroll();
+            else document.getElementById('counter').innerText = `${currentIndex + 1} / ${total}`;
+            resetAutoRotate();
+        }
+
+        function prevPhoto() {
+            currentIndex = (currentIndex - 1 + total) % total;
+            if (currentMode === '3d') updateCarousel();
+            else if (currentMode === 'film') updateFilmScroll();
+            else document.getElementById('counter').innerText = `${currentIndex + 1} / ${total}`;
+            resetAutoRotate();
+        }
+
+        function startAutoRotate() {
+            if (autoRotateTimer) clearInterval(autoRotateTimer);
+            autoRotateTimer = setInterval(() => {
+                if (currentMode === '3d') nextPhoto();
+            }, 2500);
+        }
+
+        function resetAutoRotate() {
+            clearInterval(autoRotateTimer);
+            startAutoRotate();
+        }
+
+        // Lightbox Popup Modal Functions
+        function openLightbox(photo) {
+            const modal = document.getElementById('lightboxModal');
+            const img = document.getElementById('lightboxImg');
+            const cap = document.getElementById('lightboxCaption');
+            img.src = photo.src;
+            img.onerror = () => { img.src = photo.fallback; };
+            cap.innerText = photo.caption;
+            modal.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').style.display = 'none';
+        }
+
+        // Disclaimer Accept & Audio Playback
+        const music = document.getElementById('bgMusic');
+        function acceptDisclaimer() {
+            document.getElementById('disclaimerModal').style.display = 'none';
+            music.play().catch(e => console.log("Audio deferred by browser policy:", e));
+            init3DCarousel();
+            startAutoRotate();
+        }
+
+        // Resize handler for responsive 3D radius adjustment
+        window.addEventListener('resize', () => {
+            if (currentMode === '3d') init3DCarousel();
+        });
+    </script>
+</body>
+</html>

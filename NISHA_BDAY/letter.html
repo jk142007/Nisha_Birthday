@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Birthday Letter ✨</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #4a4a4a; overflow-x: hidden; min-height: 100vh; text-align: center;
+        }
+
+        .heart-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+
+        .heart {
+            position: absolute; bottom: -20px; color: #ff4d6d;
+            font-size: 20px; opacity: 0.6; animation: floatUp 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(-105vh) translateX(var(--randomX)) rotate(360deg); opacity: 0; }
+        }
+
+        .letter-container {
+            position: relative; z-index: 2; max-width: 700px;
+            margin: 40px auto; padding: 20px;
+        }
+
+        .letter-paper {
+            background: #fffdf9; padding: 40px; border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.06); text-align: left;
+            border: 2px dashed #ffb3c1; position: relative;
+        }
+
+        .letter-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #ffe5ec; padding-bottom: 15px; margin-bottom: 25px;
+        }
+
+        .letter-title { color: #ff4d6d; font-size: 2rem; margin: 0; font-weight: bold; }
+        .date-badge { font-style: italic; color: #a3a3a3; font-size: 0.95rem; }
+
+        .letter-body { font-size: 1.15rem; line-height: 1.8; color: #444; }
+        .letter-body p { margin-bottom: 20px; }
+
+        .highlight-text { color: #c9184a; font-weight: bold; }
+
+        .cartoon-divider {
+            font-size: 2.2rem; text-align: center; margin: 30px 0;
+            letter-spacing: 15px; user-select: none;
+        }
+
+        .gift-section {
+            background: #fff0f3; padding: 25px; border-radius: 20px;
+            text-align: center; margin-top: 35px; border: 2px dotted #ff758f;
+        }
+        
+        .gift-section h3 { margin-top: 0; color: #c9184a; font-size: 1.2rem; }
+
+        .mini-box {
+            font-size: 4.5rem; cursor: pointer; display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none; margin: 15px 0;
+        }
+        .mini-box:hover { transform: scale(1.2) rotate(-5deg); }
+
+        .reveal-container {
+            display: none; flex-direction: column; align-items: center; gap: 15px;
+            margin-top: 15px; animation: scaleIn 0.4s ease forwards;
+        }
+        .reveal-container.show { display: flex; }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .secret-video {
+            max-width: 220px; height: auto; border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.3);
+            border: 4px solid white;
+        }
+
+        .secret-caption {
+            font-size: 1.1rem; font-weight: bold; color: #ff4d6d;
+            font-style: italic; margin-top: 5px;
+        }
+
+        .nav-links { 
+            margin-top: 30px; text-align: center; 
+            display: flex; justify-content: center; 
+            gap: 15px; flex-wrap: wrap; 
+        }
+
+        .back-home-btn {
+            display: inline-block; padding: 12px 25px;
+            background: linear-gradient(45deg, #ff758f, #ff4d6d);
+            color: white; text-decoration: none; font-weight: bold;
+            border-radius: 25px; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            transition: transform 0.2s;
+        }
+        .back-home-btn:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <div class="heart-container" id="heartContainer"></div>
+
+    <div class="letter-container">
+        <div class="letter-paper">
+            <div class="letter-header">
+                <div class="letter-title">To Nisha Nashedi ✨</div>
+                <div class="date-badge">Nisha's Special Day 🎉</div>
+            </div>
+
+            <div class="letter-body">
+                <p>Dear Nisha,</p>
+                
+                <p>Wishing you the happiest of birthdays! As I sit down to write this, I’m reminded of how incredibly lucky I am to have you in my life. You aren't just a friend; you're a constant source of light, my biggest cheerleader, and someone I know I can always count on.</p>
+                
+                <p>When I think about our friendship, my mind immediately goes back to our days as <span class="highlight-text">deskmates</span>. From desperately trying to stifle our laughter after cracking jokes right in the middle of a quiet class, to those intense cramming sessions where we promised each other we'd get through it—we went from <span class="highlight-text">studying together to passing together</span>, side by side. Those moments are some of my absolute favorite memories, and I wouldn't trade them for the world.</p>
+
+                <div class="cartoon-divider">🐻🎈🐱🎂🐹</div>
+
+                <p>On your special day, my biggest wish for you is that you get back all the love, joy, and laughter you put out into the world. May this coming year be filled with exciting new adventures, endless happiness, and everything you are hoping for.</p>
+                
+                <p>Take the time to celebrate yourself today, because you truly deserve the best. I can’t wait to create so many more memories together!</p>
+                
+                <p style="margin-bottom: 0; font-weight: bold; color: #ff4d6d;">With all my love and warmest wishes,<br>JK ✨</p>
+            </div>
+
+            <div class="gift-section">
+                <h3>🎁 A Special Birthday Surprise Just For You! 🎁</h3>
+                <div class="mini-box" id="giftBoxElement" onclick="openSecretBox()">🎁</div>
+                
+                <div class="reveal-container" id="secretReveal">
+                    <video class="secret-video" autoplay loop muted playsinline>
+                        <source src="gifs/dance2.mp4" type="video/mp4">
+                    </video>
+                    <div class="secret-caption">"Keep dancing through life and shining bright! ✨💖"</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html" class="back-home-btn">🏠 Home Page</a>
+            <a href="games.html" class="back-home-btn">🎮 Play Game Vault</a>
+            <a href="gallary.html" class="back-home-btn">📸 Photo Gallery</a>
+            <a href="nazar.html" class="back-home-btn">🧿 Nazar & Blessings</a>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="audio/a-cheerful-ukulele-waltz.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const container = document.getElementById('heartContainer');
+        const particles = ['❤️', '💖', '🎈', '✨', '🎂', '🥳'];
+        function addHeart() {
+            const h = document.createElement('div');
+            h.classList.add('heart');
+            h.innerText = particles[Math.floor(Math.random() * particles.length)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = Math.random() * 12 + 15 + 'px';
+            h.style.setProperty('--randomX', (Math.random() * 200 - 100) + 'px');
+            const dur = Math.random() * 2 + 4;
+            h.style.animationDuration = dur + 's';
+            container.appendChild(h);
+            setTimeout(() => h.remove(), dur * 1000);
+        }
+        setInterval(addHeart, 350);
+
+        function openSecretBox() {
+            const box = document.getElementById('giftBoxElement');
+            const reveal = document.getElementById('secretReveal');
+            box.innerText = '🔓';
+            box.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                box.style.display = 'none';
+                reveal.classList.add('show');
+            }, 250);
+        }
+
+        // Music Loop Controller
+        const music = document.getElementById('bgMusic');
+        function startMusicOnInteraction() {
+            music.play().then(() => {
+                document.removeEventListener('click', startMusicOnInteraction);
+                document.removeEventListener('touchstart', startMusicOnInteraction);
+            }).catch(e => console.log("Awaiting activation..."));
+        }
+        document.addEventListener('click', startMusicOnInteraction);
+        document.addEventListener('touchstart', startMusicOnInteraction);
+
+        music.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play().catch(e => console.log("Loop backup fail safe engine execution failed:", e));
+        }, false);
+    </script>
+</body>
+</html>
